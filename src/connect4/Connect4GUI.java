@@ -16,16 +16,15 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
     private static final int DISC_SIZE = PANEL_SIZE.width/7;
     private final JTextField alertField = new JTextField(30);
     
-    //private final Connect4Board board;
-    private final Connect4Controller controller;
-    
     private JFrame gameFrame,menuFrame;
     private Connect4Panel gamePanel;
     private JPanel menuPanel;
     
     private JButton buttonNewGame,buttonResetScores,buttonEndGame,buttonVsCpu;
     private JTextField redScoreField,yellowScoreField;
-    private JLabel redScoreLabel,yellowScoreLabel;   
+    private JLabel redScoreLabel,yellowScoreLabel;
+    
+    private final Connect4Controller controller;
     
     public Connect4GUI(Connect4Controller controller) {
         this.controller = controller;
@@ -127,11 +126,25 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
     private void newGame() {
         controller.newGame();
     }
+    
+    private void switchMode() {
+        if(controller.getPlayVsCpu()) {
+            clearScores();
+            controller.setPlayVsCpu(false);
+            newGame();
+            buttonVsCpu.setText("Play Vs CPU");
+        }
+        else {
+            clearScores();
+            controller.setPlayVsCpu(true);
+            newGame();
+            buttonVsCpu.setText("2 Player");
+        }
+    }
  
     
     @Override
      public final void update(java.util.Observable o, Object arg) {
-        //System.out.println("update called");
         if (controller.isFull()) {//board full no winner
             updateAlertField("Game drawn");
         }
@@ -169,24 +182,13 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
             endGame();
         }
         else if (event.getSource() == buttonVsCpu) {
-            if(controller.getPlayVsCpu()) {
-                clearScores();
-                controller.setPlayVsCpu(false);
-                newGame();
-                buttonVsCpu.setText("Play Vs CPU");
-            }
-            else {
-                clearScores();
-                controller.setPlayVsCpu(true);
-                newGame();
-                buttonVsCpu.setText("2 Player");
-            }
+            switchMode();
         }
     }
    
     @Override
     public void mousePressed(MouseEvent e) {
-        controller.move((int)e.getX()/DISC_SIZE,controller.getCurrentPlayer());
+        move((int)e.getX()/DISC_SIZE,controller.getCurrentPlayer());
     }
     
     @Override public void mouseExited(MouseEvent e){
@@ -199,6 +201,15 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
     }
        
     @Override public void mouseClicked(MouseEvent e){
+    }
+    
+    private void move(int column, String color) {
+        if (controller.getPlayVsCpu()) {
+            controller.move(column,controller.getHumanColor());
+        }
+        else { //We're in 2 player mode
+            controller.move(column,color);
+        }
     }
     
 }

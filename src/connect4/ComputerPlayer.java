@@ -9,29 +9,27 @@ import java.util.Observer;
 public class ComputerPlayer implements Observer {    
     private final static int[][] evaluationTable = {{3, 4, 5, 5, 4, 3},
                                                     {4, 6, 8, 8, 6, 4},
-                                                    {5, 8,11,11, 8, 5},
-                                                    {7,10,13,13,10, 7},
-                                                    {5, 8,11,11, 8, 5},
+                                                    {13, 8,11,11, 8, 5},
+                                                    {14,10,12,12,10, 7},
+                                                    {13, 8,11,11, 8, 5},
                                                     {4, 6, 8, 8, 6, 4},
                                                     {3, 4, 5, 5, 4, 3}};
     
-    Connect4Board copyBoard;
     Connect4Controller controller;
     String cpuColor;
     String humanColor;
     
     public ComputerPlayer(Connect4Controller controller) {
-        this.cpuColor = controller.getCpuColor();
-        humanColor=(cpuColor.equals("Yellow") ? "Red" : "Yellow");
         this.controller = controller;
-        copyBoard = new Connect4Board(controller.getBoard());
+        cpuColor = controller.getCpuColor();
+        humanColor=controller.getHumanColor();       
     }
     
     /**
      * This method calls various functions that go towards making a move
      */
     public void move() {
-        copyBoard = new Connect4Board(controller.getBoard());//possibly a bit memory hungry but makes use of copy constructor
+        Connect4Board copyBoard = new Connect4Board(controller.getBoard());//possibly a bit memory hungry but makes use of copy constructor
         tryToWin(copyBoard);
         blockOpponent(copyBoard);
         boolean[] badMoves = findBadMoves(copyBoard);
@@ -44,7 +42,6 @@ public class ComputerPlayer implements Observer {
                 board.insert(i,cpuColor);
                 if(board.getWinner()!=null && board.getWinner().equals(cpuColor)) {
                     controller.move(i, cpuColor);
-                    return;
                 }
                 board.remove(i);
             }
@@ -57,7 +54,6 @@ public class ComputerPlayer implements Observer {
                 board.insert(i,humanColor);
                 if(board.getWinner()!=null && board.getWinner().equals(humanColor)) {
                     controller.move(i, cpuColor);
-                    return;
                 }
                 board.remove(i);
             }
@@ -65,11 +61,11 @@ public class ComputerPlayer implements Observer {
     }
     
     private boolean[] findBadMoves(Connect4Board board) {
-        boolean[] badMoves = new boolean[controller.getColumns()];
-        for (int i=0; i<controller.getColumns()-1;i++) {
+        boolean[] badMoves = new boolean[board.getColumns()];
+        for (int i=0; i<board.getColumns()-1;i++) {
             badMoves[i] = false;
         }
-        for (int j=0; j<controller.getColumns()-1;j++) {
+        for (int j=0; j<board.getColumns()-1;j++) {
             if(board.canInsert(j)) {
                 board.insert(j,cpuColor);
                 if (board.canInsert(j)) {
@@ -92,7 +88,7 @@ public class ComputerPlayer implements Observer {
         int bestColumn = 0;
         int secondBestColumn = 0;
         int highestSlotValue = 0;
-        for (int i=0; i<controller.getColumns(); i++) {
+        for (int i=0; i<board.getColumns(); i++) {
             while(board.getBoard()[i][row]!=null && row<controller.getRows()-1){
                 row++;
             }

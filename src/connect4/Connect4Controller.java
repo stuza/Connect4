@@ -10,6 +10,7 @@ public class Connect4Controller {
     private String currentPlayer;
     private boolean playVsCpu;
     private final String cpuColor;
+    private final String humanColor;
     private int redScore = 0;
     private int yellowScore = 0;
     private String lastPlayerToStart;
@@ -18,6 +19,7 @@ public class Connect4Controller {
         this.board = board;
         playVsCpu = false;
         cpuColor = "Yellow";//needs to be random
+        humanColor=(cpuColor.equals("Yellow") ? "Red" : "Yellow");
         currentPlayer = "Red";//needs to be random
         lastPlayerToStart = currentPlayer;
         cpuPlayer = new ComputerPlayer(this);
@@ -58,6 +60,10 @@ public class Connect4Controller {
     
     public String getCpuColor() {
         return cpuColor;
+    }
+    
+    public String getHumanColor() {
+        return humanColor;
     }
     
     public String getWinner() {
