@@ -120,11 +120,13 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
     }
     
     private void endGame() {
-        controller.endGame();     
+        controller.endGame();  
+        buttonEndGame.setEnabled(false);
     }
     
     private void newGame() {
         controller.newGame();
+        buttonEndGame.setEnabled(true);
     }
     
     private void switchMode() {

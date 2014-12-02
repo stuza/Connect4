@@ -22,7 +22,7 @@ public class ComputerPlayer implements Observer {
     public ComputerPlayer(Connect4Controller controller) {
         this.controller = controller;
         cpuColor = controller.getCpuColor();
-        humanColor=controller.getHumanColor();       
+        humanColor = controller.getHumanColor();       
     }
     
     /**
@@ -109,13 +109,13 @@ public class ComputerPlayer implements Observer {
             controller.move(secondBestColumn,cpuColor);
         }
         else {//find first available non-bad slot then just simply any free slot
-            for (int j=0; j<badMoves.length; j++) {
+            for (int j=0; j<badMoves.length-1; j++) {
                 if(!badMoves[j] && board.canInsert(j)) {
                     controller.move(j, cpuColor);
                     return;
                 }
             }
-            for (int k=0; k<board.getColumns(); k++) {
+            for (int k=0; k<board.getColumns()-1; k++) {
                 if(board.canInsert(k)) {
                     controller.move(k, cpuColor);
                 }
@@ -125,9 +125,9 @@ public class ComputerPlayer implements Observer {
     
     @Override
     public final void update(java.util.Observable o, Object arg) {
-         if (controller.getPlayVsCpu() && controller.getCurrentPlayer().equals(cpuColor)) {
+        if (controller.getPlayVsCpu() && controller.getCurrentPlayer()!=null && controller.getCurrentPlayer().equals(cpuColor)) {
             move();
-         }
+        }
     }
            
     

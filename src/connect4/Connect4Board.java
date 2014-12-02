@@ -26,10 +26,13 @@ public class Connect4Board extends Observable implements Board {
         init();
     }
     
-    
+    /**
+     * Connect4Board copy constructor.
+     * @param anotherBoard 
+     */
     public Connect4Board(Connect4Board anotherBoard) {
         init();
-        this.gameBoard = copy2dArray(anotherBoard.getBoard());     
+        this.gameBoard = copy2dStringArray(anotherBoard.getBoard());     
     }
     
     
@@ -37,6 +40,7 @@ public class Connect4Board extends Observable implements Board {
      * init() function called by constructor and used to reset board to default
      * state. Will notify observers of the change.
      * Declared as public final void to prevent being overridden.
+     * Notifies observers
      */
     //@assignable gameBoard;
     //@assignable winner;
@@ -99,6 +103,7 @@ public class Connect4Board extends Observable implements Board {
      * any observers of the change.
      * @param color of disc to insert
      * @param column into which we insert the disc
+     * Notifies Observers
      */
     //@assignable gameBoard;
     //@requires column>0 && column<numColumns-1;
@@ -242,7 +247,12 @@ public class Connect4Board extends Observable implements Board {
     }
     
     
-    private String[][] copy2dArray(String[][] source) {
+    /**
+     * copy2dStringArray
+     * @param source 2D String Array
+     * @return copy of source
+     */
+    private String[][] copy2dStringArray(String[][] source) {
         String[][] copy = new String[source.length][];
         for(int i=0;i<source.length;i++) {
             copy[i] = Arrays.copyOf(source[i], source[i].length);
@@ -250,7 +260,10 @@ public class Connect4Board extends Observable implements Board {
         return copy;
     }
     
-    
+    /**
+     * clearBoard sets all slots in the gameBoard to null.
+     * Notifies observers.
+     */
     public void clearBoard() {
         for (int i=0; i< numColumns-1; i++) {
             for (int j=0; j < numRows-1; j++) {
