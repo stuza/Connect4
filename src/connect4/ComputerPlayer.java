@@ -1,6 +1,8 @@
 package connect4;
 
+import java.util.Arrays;
 import java.util.Observer;
+
 
 /**
  *
@@ -30,34 +32,40 @@ public class ComputerPlayer implements Observer {
      */
     public void move() {
         Connect4Board copyBoard = new Connect4Board(controller.getBoard());//possibly a bit memory hungry but makes use of copy constructor
-        tryToWin(copyBoard);
-        blockOpponent(copyBoard);
+        if(tryToWin(copyBoard)) {return;}
+        if(blockOpponent(copyBoard)) {return;}
         boolean[] badMoves = findBadMoves(copyBoard);
         pickBestColumn(copyBoard, badMoves);    
     }
     
-    private void tryToWin(Connect4Board board) {
+    private boolean tryToWin(Connect4Board board) {
         for (int i=0; i<controller.getColumns();i++) {
             if(board.canInsert(i)) {
                 board.insert(i,cpuColor);
                 if(board.getWinner()!=null && board.getWinner().equals(cpuColor)) {
+                    //System.out.println("trying tryToWin");
                     controller.move(i, cpuColor);
+                    return true;
                 }
                 board.remove(i);
             }
         }
+        return false;
     }
     
-    private void blockOpponent(Connect4Board board) {
+    private boolean blockOpponent(Connect4Board board) {
         for (int i=0; i<controller.getColumns();i++) {
             if(board.canInsert(i)) {
                 board.insert(i,humanColor);
                 if(board.getWinner()!=null && board.getWinner().equals(humanColor)) {
+                    //System.out.println("trying blockOpponent");
                     controller.move(i, cpuColor);
+                    return true;
                 }
                 board.remove(i);
             }
         }
+        return false;
     }
     
     private boolean[] findBadMoves(Connect4Board board) {
@@ -102,22 +110,27 @@ public class ComputerPlayer implements Observer {
         //try to insert in bestColumn. If thats a bad move the try second best
         //column. If that's a bad move, insert in the first column that isn't
         //bad. If all moves are bad, it doesn't matter what we do
-        if(!badMoves[bestColumn]) {
+        if(!badMoves[bestColumn] && controller.canInsert(bestColumn)) {
+            //System.out.println("trying bestColumn="+bestColumn+" highestSlotValue= "+highestSlotValue+" badMoves[]= "+Arrays.toString(badMoves));
             controller.move(bestColumn,cpuColor);
         }
-        else if(!badMoves[secondBestColumn]) {
+        else if(!badMoves[secondBestColumn] && controller.canInsert(secondBestColumn)) {
+            //System.out.println("trying secondBestColumn= "+secondBestColumn+" bestColumn= "+bestColumn+" badMoves[]= "+Arrays.toString(badMoves));
             controller.move(secondBestColumn,cpuColor);
         }
-        else {//find first available non-bad slot then just simply any free slot
-            for (int j=0; j<badMoves.length-1; j++) {
-                if(!badMoves[j] && board.canInsert(j)) {
+        else {//find first available non-bad slot 
+            for (int j=0; j<controller.getColumns(); j++) {
+                if(!badMoves[j] && controller.canInsert(j)) {
+                    //System.out.println("trying first free non-bad column= "+j+" bestColumn= "+bestColumn+" secondBestColumn= "+secondBestColumn+" badMoves[]= "+Arrays.toString(badMoves));
                     controller.move(j, cpuColor);
                     return;
                 }
-            }
-            for (int k=0; k<board.getColumns()-1; k++) {
-                if(board.canInsert(k)) {
+            }//then just simply any free slot
+            for (int k=0; k<controller.getColumns(); k++) {
+                if(controller.canInsert(k)) {
+                    //System.out.println("trying any free column= "+k+" badMoves[]= "+Arrays.toString(badMoves));
                     controller.move(k, cpuColor);
+                    return;
                 }
             }          
         }         
@@ -125,7 +138,9 @@ public class ComputerPlayer implements Observer {
     
     @Override
     public final void update(java.util.Observable o, Object arg) {
-        if (controller.getPlayVsCpu() && controller.getCurrentPlayer()!=null && controller.getCurrentPlayer().equals(cpuColor)) {
+        if (controller.getPlayVsCpu() && controller.getCurrentPlayer()!=null && 
+                controller.getCurrentPlayer().equals(cpuColor) &&
+                    controller.getWinner()==null) {
             move();
         }
     }

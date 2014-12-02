@@ -14,15 +14,15 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
     private static final String TITLE = "Connect4";
     private static final Dimension PANEL_SIZE = new Dimension(350,300);
     private static final int DISC_SIZE = PANEL_SIZE.width/7;
-    private final JTextField alertField = new JTextField(30);
+    
+    private final JTextField alertField = new JTextField(30);   
+    private JTextField redScoreField,yellowScoreField;
+    private JLabel redScoreLabel,yellowScoreLabel;
+    private JButton buttonNewGame,buttonResetScores,buttonEndGame,buttonVsCpu;
     
     private JFrame gameFrame,menuFrame;
     private Connect4Panel gamePanel;
     private JPanel menuPanel;
-    
-    private JButton buttonNewGame,buttonResetScores,buttonEndGame,buttonVsCpu;
-    private JTextField redScoreField,yellowScoreField;
-    private JLabel redScoreLabel,yellowScoreLabel;
     
     private final Connect4Controller controller;
     
@@ -32,7 +32,7 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
         
         createControlFrame();
         createBoardFrame();
-        controller.getBoard().init();
+        //controller.getBoard().init();
         update(controller.getBoard(),null);
     }
   

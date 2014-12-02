@@ -7,13 +7,14 @@ package connect4;
 public class Connect4Controller {
     private final Connect4Board board;
     private final ComputerPlayer cpuPlayer;
-    private String currentPlayer;
-    private boolean playVsCpu;
     private final String cpuColor;
     private final String humanColor;
+    private String currentPlayer;
+    private String lastPlayerToStart;
+    private boolean playVsCpu;   
     private int redScore = 0;
     private int yellowScore = 0;
-    private String lastPlayerToStart;
+    
     
     public Connect4Controller(Connect4Board board) {
         this.board = board;

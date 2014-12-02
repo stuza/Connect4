@@ -133,12 +133,16 @@ public class Connect4Board extends Observable implements Board {
      * @param column 
      */
     public void remove(int column) {
-	for (int i=numRows-1; i>-1; i--) {
+        int i;
+	for (i=numRows-1; i>-1; i--) {
             if (gameBoard[column][i] != null) {
 		gameBoard[column][i] = null;
 		break;
             }
 	}
+        if (!isWinner("Yellow",column,i) && !isWinner("Red",column,i)) {
+            winner=null;
+        }
     }
     
     /**
