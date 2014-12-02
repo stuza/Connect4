@@ -10,7 +10,7 @@ public class ComputerPlayer implements Observer {
     private final static int[][] evaluationTable = {{3, 4, 5, 5, 4, 3},
                                                     {4, 6, 8, 8, 6, 4},
                                                     {13, 8,11,11, 8, 5},
-                                                    {14,10,12,12,10, 7},
+                                                    {14,14,12,12,10, 7},
                                                     {13, 8,11,11, 8, 5},
                                                     {4, 6, 8, 8, 6, 4},
                                                     {3, 4, 5, 5, 4, 3}};
@@ -62,10 +62,10 @@ public class ComputerPlayer implements Observer {
     
     private boolean[] findBadMoves(Connect4Board board) {
         boolean[] badMoves = new boolean[board.getColumns()];
-        for (int i=0; i<board.getColumns()-1;i++) {
+        for (int i=0; i<board.getColumns();i++) {
             badMoves[i] = false;
         }
-        for (int j=0; j<board.getColumns()-1;j++) {
+        for (int j=0; j<board.getColumns();j++) {
             if(board.canInsert(j)) {
                 board.insert(j,cpuColor);
                 if (board.canInsert(j)) {
@@ -84,11 +84,12 @@ public class ComputerPlayer implements Observer {
     private void pickBestColumn(Connect4Board board, boolean[] badMoves) {
         //check our evaluation table to find the "most valuable" free slot
         //that isn't a "bad move".
-        int row = 0;
         int bestColumn = 0;
         int secondBestColumn = 0;
         int highestSlotValue = 0;
+        int row;
         for (int i=0; i<board.getColumns(); i++) {
+            row = 0;
             while(board.getBoard()[i][row]!=null && row<controller.getRows()-1){
                 row++;
             }
@@ -108,13 +109,13 @@ public class ComputerPlayer implements Observer {
             controller.move(secondBestColumn,cpuColor);
         }
         else {//find first available non-bad slot then just simply any free slot
-            for (int j=0; j<badMoves.length-1; j++) {
+            for (int j=0; j<badMoves.length; j++) {
                 if(!badMoves[j] && board.canInsert(j)) {
                     controller.move(j, cpuColor);
                     return;
                 }
             }
-            for (int k=0; k<board.getColumns()-1; k++) {
+            for (int k=0; k<board.getColumns(); k++) {
                 if(board.canInsert(k)) {
                     controller.move(k, cpuColor);
                 }
