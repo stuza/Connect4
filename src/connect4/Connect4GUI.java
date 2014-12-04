@@ -32,7 +32,6 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
         
         createControlFrame();
         createBoardFrame();
-        //controller.getBoard().init();
         update(controller.getBoard(),null);
     }
   
@@ -66,6 +65,7 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
         buttonNewGame.addActionListener(Connect4GUI.this);
         buttonResetScores = new JButton("Reset Scores");
         buttonResetScores.addActionListener(Connect4GUI.this);
+        buttonResetScores.setEnabled(false);
         buttonEndGame = new JButton("End Game");
         buttonEndGame.addActionListener(Connect4GUI.this);
         buttonVsCpu = new JButton("");
@@ -117,6 +117,7 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
         controller.setYellowScore(0);
         yellowScoreField.setText(Integer.toString(controller.getYellowScore()));
         redScoreField.setText(Integer.toString(controller.getRedScore()));
+        buttonResetScores.setEnabled(false);
     }
     
     private void endGame() {
@@ -152,6 +153,7 @@ public class Connect4GUI implements Observer, MouseListener, ActionListener {
         }
         else if (controller.getWinner()!=null) {//game has been won
             updateAlertField(controller.getWinner()+ " wins!");
+            buttonResetScores.setEnabled(true);
             if (controller.getWinner().equals("Red")) {
                 controller.setRedScore(controller.getRedScore()+1);
                 redScoreField.setText(Integer.toString(controller.getRedScore()));

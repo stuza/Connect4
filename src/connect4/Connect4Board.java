@@ -273,7 +273,8 @@ public class Connect4Board extends Observable implements Board {
             for (int j=0; j < numRows-1; j++) {
                 gameBoard[i][j] = null;
             }
-	}      
+	}
+        winner = null;
         setChanged();
         notifyObservers();
     }
